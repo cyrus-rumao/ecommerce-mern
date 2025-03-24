@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { redis } from "../redis.js";
-import User from "../Models/User.js";
+// import { redis } from "../redis.js";
+import User from "../Models/UserModel.js";
 import bcrypt from "bcrypt";
 
 export const ProtectRoute = async (req, res, next) => {
@@ -21,11 +21,26 @@ export const ProtectRoute = async (req, res, next) => {
       if (error.name === "TokenExpiredError") {
         return res.status(401).json({ message: "Token Expired" });
       }
+      throw error;
     }
   } catch (error) {
     console.log("Error in Protect Route", error);
     return res
       .status(500)
       .json({ message: "Unauthorised- Invalid Access Token" });
+  }
+};
+
+
+export const adminRoute = async (req, res, next) => {
+  try {
+    if ( req.user &&req.user.role === "admin") {
+      next();
+    } else {
+      return res.status(403).json({ message: "Forbidden! Admin Access Only" });
+    }
+  } catch (error) {
+    console.log("Error in Admin Route", error);
+    return res.status(500).json({ message: "Unauthorised" });
   }
 };

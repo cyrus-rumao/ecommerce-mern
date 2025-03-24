@@ -4,7 +4,7 @@ import {
   signupvalidation,
   loginvalidation,
 } from "../Middlewares/AuthValidation.js";
-import { login, signup, logout, refreshToken, getProfile } from "../Controllers/auth.js";
+import { login, signup, logout, refreshToken, getProfile } from "../Controllers/authController.js";
 import { get } from "mongoose";
 const router = express.Router();
 router.post("/login", loginvalidation, login);

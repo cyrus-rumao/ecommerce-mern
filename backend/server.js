@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoute from "./Routes/authRoute.js";
 import prodRoute from "./Routes/prodRoute.js";
-
+import cartRoutes from "./Routes/cartRoutes.js";
 import dotenv from "dotenv";
 import { connectDB } from "./Config/db.js";
 dotenv.config();
@@ -19,6 +19,8 @@ app.get("/hello", (req, res) => {
 });
 app.use("/api/auth", authRoute);
 app.use("/api/products", prodRoute);
+app.use("/api/cart", cartRoutes);
+app.use("/api/coupons", couponRoutes)
 // console.log(process.env.REDIS_URI);
 
 app.listen(PORT, () => {
