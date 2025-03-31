@@ -1,6 +1,6 @@
 import express from "express";
 import Product from "../Models/productModel.js";
-import { redis } from "../redis.js";
+import { redis } from "../Config/redis.js";
 import { TimeSeriesAggregationType } from "redis";
 import cloudinary from "../Config/cloudinary.js";
 export const getProducts = async (req, res) => {

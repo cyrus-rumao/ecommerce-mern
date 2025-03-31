@@ -2,7 +2,7 @@
 import User from "../Models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { redis } from "../redis.js";
+import { redis } from "../Config/redis.js";
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {

@@ -1,6 +1,6 @@
 import express from "express";
-import { ProtectRoute } from "../Middlewares/Auth";
-import { getCoupon, validateCoupon } from "../Controllers/couponController";
+import { ProtectRoute } from "../Middlewares/Auth.js";
+import { getCoupon, validateCoupon } from "../Controllers/couponController.js";
 const router = express.Router();
 
 router.get("/", ProtectRoute, getCoupon);
