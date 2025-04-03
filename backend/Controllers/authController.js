@@ -76,28 +76,63 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Error in Auth Controller" });
   }
 };
+// export const login = async (req, res) => {
+//   //   const errormsg /= "Invalid credentials";
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+//     if (user && (await bcrypt.compare(password, user.password))) {
+//       const { accessToken, refreshToken } = generateTokens(user._id);
+//       await storeRefreshToken(refreshToken, user._id);
+//       setCookies(res, accessToken, refreshToken);
+//       return res.status(200).json({
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//         message: "Login successful",
+//         success: true,
+//       });
+//     }
+//     return res.status(400).json({ message: "Invalid credentials" });
+//   } catch (error) {
+//     console.log("Error in login Controller", error);
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+
 export const login = async (req, res) => {
-  //   const errormsg /= "Invalid credentials";
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const { accessToken, refreshToken } = generateTokens(user._id);
-      await storeRefreshToken(refreshToken, user._id);
-      setCookies(res, accessToken, refreshToken);
-      return res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        message: "Login successful",
-        success: true,
-      });
+    const existinguser = await User.findOne({ email });
+
+    if (
+      !existinguser ||
+      !(await bcrypt.compare(password, existinguser.password))
+    ) {
+      res.status(400).json({ message: "Invalid credentials" });
     }
-    return res.status(400).json({ message: "Invalid credentials" });
+    console.log("Generating Tokens! ❌");
+    // Generate access & refresh tokens
+    const { accessToken, refreshToken } = generateTokens(existinguser._id);
+    console.log("Storing Tokens ❌");
+    // await storeRefreshToken(refreshToken, existinguser._id);
+    // Set cookies properly
+    setCookies(res, accessToken, refreshToken);
+    // res.cookie("Hello", "World", { httpOnly: true });
+    res.status(200).json({
+      message: "Login successful",
+      success: true,
+      user: {
+        _id: existinguser._id,
+        name: existinguser.name,
+        email: existinguser.email,
+        role: existinguser.role,
+      },
+    });
   } catch (error) {
-    console.log("Error in login Controller", error);
-    return res.status(500).json({ message: error.message });
+    console.error("Error in login Controller:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -125,7 +160,7 @@ export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-     return res.status(400).json({ message: "No Refresh Token Found" });
+      res.status(400).json({ message: "No Refresh Token Found" });
     }
     if (refreshToken) {
       const decoded = jwt.verify(
@@ -134,7 +169,7 @@ export const refreshToken = async (req, res) => {
       );
       const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
       if (storedToken !== refreshToken) {
-       return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: "Unauthorized" });
       }
       const accessToken = jwt.sign(
         { userId: decoded.userId },
@@ -156,7 +191,7 @@ export const refreshToken = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in Refreshing Token", error);
-   return res.status(500).json({ message: "Error in Refreshing Token" });
+    return res.status(500).json({ message: "Error in Refreshing Token" });
   }
 };
 
