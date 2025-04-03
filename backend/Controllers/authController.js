@@ -125,7 +125,7 @@ export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-      res.status(400).json({ message: "No Refresh Token Found" });
+     return res.status(400).json({ message: "No Refresh Token Found" });
     }
     if (refreshToken) {
       const decoded = jwt.verify(
@@ -134,7 +134,7 @@ export const refreshToken = async (req, res) => {
       );
       const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
       if (storedToken !== refreshToken) {
-        res.status(401).json({ message: "Unauthorized" });
+       return res.status(401).json({ message: "Unauthorized" });
       }
       const accessToken = jwt.sign(
         { userId: decoded.userId },
@@ -146,17 +146,17 @@ export const refreshToken = async (req, res) => {
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        sameSite: "strict",
+        // secure: process.env.NODE_ENV === "production" ? true : false,
+        // sameSite: "strict",
         maxAge: 15 * 60 * 100,
       });
-      res
+      return res
         .status(200)
         .json({ accessToken, message: "Token Refreshed Successfully" });
     }
   } catch (error) {
     console.log("Error in Refreshing Token", error);
-    res.status(500).json({ message: "Error in Refreshing Token" });
+   return res.status(500).json({ message: "Error in Refreshing Token" });
   }
 };
 
