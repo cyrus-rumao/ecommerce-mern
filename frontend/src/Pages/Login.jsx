@@ -1,41 +1,43 @@
 /*eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { handleError,handleSuccess } from "../../Components/utils";
+import { handleError, handleSuccess } from "../lib/utils";
 import axios from "axios";
-
+import axiosInstance from "../lib/axiosInstance";
 const Login = () => {
-  const navigate  = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password)
-    if(email.includes("@") === false) {
+    console.log(email, password);
+    if (email.includes("@") === false) {
       return handleError("Invalid Email");
     }
     if (password.length < 6) {
       return handleError("Password must be at least 6 characters");
     }
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', { email, password },
+      const response = await axiosInstance.post(
+        "/auth/login",
+        { email, password },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
       if (response.status === 200) {
         handleSuccess(response.data.message);
-        navigate('/');
+        navigate("/");
       }
-    } catch(error) {
+    } catch (error) {
       handleError(error.response.data.message);
     }
   };
@@ -82,7 +84,7 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            onClick={handleSubmit} 
+            onClick={handleSubmit}
             className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 sm:py-4 rounded-lg transition"
           >
             Login

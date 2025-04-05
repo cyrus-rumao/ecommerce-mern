@@ -7,4 +7,11 @@ import tailwindConfig from './tailwind.config.js' // Import Tailwind config
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [tailwindcss(tailwindConfig), react()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+      }
+    }
+  }
 })

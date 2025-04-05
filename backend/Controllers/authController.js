@@ -112,10 +112,10 @@ export const login = async (req, res) => {
     ) {
       res.status(400).json({ message: "Invalid credentials" });
     }
-    console.log("Generating Tokens! ❌");
+    console.log("Generating Tokens! for User: ❌",email);
     // Generate access & refresh tokens
     const { accessToken, refreshToken } = generateTokens(existinguser._id);
-    console.log("Storing Tokens ❌");
+    console.log("Storing Tokens for ❌",email);
     // await storeRefreshToken(refreshToken, existinguser._id);
     // Set cookies properly
     setCookies(res, accessToken, refreshToken);

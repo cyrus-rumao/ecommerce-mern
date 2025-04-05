@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes } from "react-router-dom";
 import Routers from "./Routes";
-import Navbar from "../Components/Navbar";
+import Navbar from "./Components/Navbar";
 import { Toaster } from "sonner";
 const App = () => {
   return (

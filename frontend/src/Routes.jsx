@@ -8,12 +8,12 @@ import {
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
-import useAuthGuard from "./useAuthGuard"; // Importing auth guard
+// import useAuthGuard from "./useAuthGuard"; // Importing auth guard
 
 const Routers = () => {
-  const isLoading = useAuthGuard(); // Call useAuthGuard to handle authentication redirects
+  // const isLoading = useAuthGuard(); // Call useAuthGuard to handle authentication redirects
 
-  if (isLoading) return null; // Prevent UI flickering while checking authentication
+  // if (isLoading) return null; // Prevent UI flickering while checking authentication
 
   return (
     <Routes>

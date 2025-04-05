@@ -25,7 +25,7 @@ const Navbar = () => {
             to="/"
             className="text-2xl font-bold text-gray-200 hover:text-white"
           >
-            E-Commerce
+            ShopSphere
           </Link>
           <div className="hidden md:flex space-x-6 justify-center items-center">
             <Link

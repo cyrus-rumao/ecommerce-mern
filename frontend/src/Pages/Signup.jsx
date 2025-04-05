@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff, User, Mail, KeyRound, LoaderCircle } from "lucide-react";
 import axios from "axios";
-import { handleError, handleSuccess } from "../../Components/utils";
-
+import { handleError, handleSuccess } from "../lib/utils";
+// import { useUserStore } from "../Stores/useUserStore";
+import axiosInstance from "../lib/axiosInstance.jsx";
 const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +26,7 @@ const Signup = () => {
     setError(""); // Clear error when user types
     // console.log(formData);
   };
-
+  // const {signup,user} = useUserStore()
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -47,25 +48,18 @@ const Signup = () => {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/signup",
-        {
-          name:formData.fullName,
-          email:formData.email,
-          password:formData.password,
-        },
-        {
-          withCredentials: true,
-        },
-        {
-          headers: { "Content-Type": "application/json" }, // Ensure JSON format
-        }
-      );
-      handleSuccess("Account Created Successfully");
+      const response = await axiosInstance.post("/auth/signup", {
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+    console.log(response.data);
+      if (response.status === 200) {
+        handleSuccess("Account Created Successfully");
+      }
       navigate("/login");
-      console.log(response);
     } catch (error) {
-      handleError(error.response.data.message);
+      handleError(error?.response?.data?.message || "Signup failed");
     }
     console.log("Form Submitted:", formData);
     // Proceed with form submission (e.g., API call)
