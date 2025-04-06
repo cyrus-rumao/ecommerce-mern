@@ -34,13 +34,13 @@ const setCookies = (res, accessToken, refreshToken) => {
   res.cookie("accessToken", accessToken, {
     httpOnly: true, //prevent xss attacks
     secure: process.env.NODE_ENV === "production" ? true : false, // cannot be accessed by client side scripts it will be tru only if NODE_ENV is production
-    sameSite: "strict", //  prevents cross side forgery attack
+    sameSite: "lax", //  prevents cross side forgery attack
     maxAge: 15 * 60 * 1000, //minutes*seconds *milliseconds
   }),
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true, //prevent xss attacks
       secure: process.env.NODE_ENV === "production" ? true : false, // cannot be accessed by client side scripts it will be tru only if NODE_ENV is production
-      sameSite: "strict", //  prevents cross side forgery attack
+      sameSite: "lax", //  prevents cross side forgery attack
       maxAge: 7 * 24 * 60 * 60 * 1000, //days*hours*minutes*seconds *milliseconds
     });
 };
@@ -71,7 +71,7 @@ export const signup = async (req, res) => {
       email: user.email,
       role: user.role,
     });
-    // await newUser.save();
+    await newUser.save();
   } catch (error) {
     res.status(500).json({ message: "Error in Auth Controller" });
   }
@@ -110,13 +110,13 @@ export const login = async (req, res) => {
       !existinguser ||
       !(await bcrypt.compare(password, existinguser.password))
     ) {
-      res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
     console.log("Generating Tokens! for User: ❌",email);
     // Generate access & refresh tokens
     const { accessToken, refreshToken } = generateTokens(existinguser._id);
     console.log("Storing Tokens for ❌",email);
-    // await storeRefreshToken(refreshToken, existinguser._id);
+    await storeRefreshToken(refreshToken, existinguser._id);
     // Set cookies properly
     setCookies(res, accessToken, refreshToken);
     // res.cookie("Hello", "World", { httpOnly: true });
@@ -181,9 +181,9 @@ export const refreshToken = async (req, res) => {
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        // secure: process.env.NODE_ENV === "production" ? true : false,
-        // sameSite: "strict",
-        maxAge: 15 * 60 * 100,
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        sameSite: "strict",
+        maxAge: 15 * 60 * 1000,
       });
       return res
         .status(200)

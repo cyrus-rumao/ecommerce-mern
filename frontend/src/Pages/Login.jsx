@@ -6,7 +6,10 @@ import { Eye, EyeOff } from "lucide-react";
 import { handleError, handleSuccess } from "../lib/utils";
 import axios from "axios";
 import axiosInstance from "../lib/axiosInstance";
+import { useAuth } from "../lib/AuthContext";
 const Login = () => {
+  const { currentUser, setCurrentUser } = useAuth();
+// const {currentUser} = useAuth()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,14 +34,21 @@ const Login = () => {
         { email, password },
         {
           headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
       if (response.status === 200) {
+        setCurrentUser(response.data.user);
+        //currentUser(response.data.user)
         handleSuccess(response.data.message);
         navigate("/");
       }
     } catch (error) {
-      handleError(error.response.data.message);
+      console.log(currentUser)
+      console.log("Error in login")
+      console.log("Error message", error.message)
+      console.log("Error response", error.response?.data?.message)
+      handleError(error.response?.data?.message || "Login failed");
     }
   };
   return (

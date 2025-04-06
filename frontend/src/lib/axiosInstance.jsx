@@ -27,7 +27,6 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // If token expired
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -36,33 +35,28 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers["Authorization"] = `Bearer ${token}`;
-            return axiosInstance(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+        }).then((token) => {
+          originalRequest.headers["Authorization"] = `Bearer ${token}`;
+          return axiosInstance(originalRequest);
+        }).catch((err) => {
+          return Promise.reject(err);
+        });
       }
 
       isRefreshing = true;
 
       try {
-        const response = await axios.post(
+        const res = await axios.post(
           `${baseURL}/auth/refresh-token`,
           {},
           { withCredentials: true }
         );
 
-        const newAccessToken = response.data.accessToken;
-
+        const newAccessToken = res.data.accessToken;
         processQueue(null, newAccessToken);
-
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);
@@ -76,4 +70,15 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+// 💡 Check if user is authenticated and return their profile
+
 export default axiosInstance;
+export const checkAuth = async () => {
+  try {
+    const res = await axiosInstance.get("/auth/profile");
+    // console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.log(err.message)
+  }
+};

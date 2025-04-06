@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -11,12 +11,35 @@ import {
   UserPlus,
   ShoppingCart,
 } from "lucide-react";
+import axiosInstance, { checkAuth } from "../lib/axiosInstance"; // Import the checkAuth function
+import axios from "axios";
+import { useAuth } from "../lib/authContext"; // Import the AuthContext
 
 const Navbar = () => {
+  const { currentUser, setCurrentUser } = useAuth(); // Authenticated user
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false); // Assuming this is determined from the backend
   const [loggedIn, setLoggedIn] = useState(false);
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(3); // Cart count
+  // const [currentUser, setCurrentUser] = useState(null); // Authenticated user
+  // if (user) {
+  //   setCurrentUser(user); // Set the authenticated user
+  // }
+
+  // console.log("User from Navbar:", user);
+  // setUser(user); // Set the authenticated user
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/auth/logout", {});
+      setCurrentUser(null);
+      navigate("/login");
+      console.log("logged out");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+  // setCurrentUser(user); // Set the authenticated user
   return (
     <header>
       <nav className="bg-gray-900 text-white p-4 shadow-lg">
@@ -28,13 +51,10 @@ const Navbar = () => {
             ShopSphere
           </Link>
           <div className="hidden md:flex space-x-6 justify-center items-center">
-            <Link
-              to="/"
-              className="text-gray-300 hover:text-white transition"
-            >
+            <Link to="/" className="text-gray-300 hover:text-white transition">
               Home
             </Link>
-            {loggedIn && (
+            {currentUser && (
               <Link to="/cart" className="relative">
                 <button className="text-gray-300 hover:text-white transition text-semibold p-2 rounded-xl flex items-center">
                   <ShoppingCart className="text-gray-300" />
@@ -47,7 +67,7 @@ const Navbar = () => {
                 </button>
               </Link>
             )}
-            {loggedIn && isAdmin && (
+            {currentUser && isAdmin && (
               <Link to="/dashboard">
                 <button className="text-gray-300 hover:text-white transition bg-purple-700 hover:bg-purple-800 text-semibold p-2 rounded-xl flex">
                   <MonitorCog className="mr-2 text-black" />
@@ -55,10 +75,14 @@ const Navbar = () => {
                 </button>
               </Link>
             )}
-            {loggedIn ? (
-              <button className="bg-gray-800 p-2 flex rounded-lg hover:bg-gray-700  items-center transition">
+            {currentUser ? (
+              <button
+                className="bg-gray-800 p-2 flex rounded-lg hover:bg-gray-700 items-center transition"
+                onClick={handleLogout}
+                type="button"
+              >
                 <LogOut
-                  className="text-gray-300 hover:text-white transition "
+                  className="text-gray-300 hover:text-white transition"
                   size={20}
                 />
                 <span className="font-semibold">Logout</span>
@@ -67,7 +91,6 @@ const Navbar = () => {
               <>
                 <Link to="/login">
                   <button className="bg-gray-800 p-2 rounded-lg flex hover:bg-gray-700 items-center transition">
-                    {/* <LogOut className="mr-2 text-gray-300" /> */}
                     <LogIn
                       className="text-gray-300 mr-2 hover:text-white transition"
                       size={20}
@@ -76,8 +99,7 @@ const Navbar = () => {
                   </button>
                 </Link>
                 <Link to="/signup">
-                  <button className="bg-purple-800 p-2 rounded-lg flex hover:bg-gray-700  items-center transition">
-                    {/* <LogOut className="mr-2 text-gray-300" /> */}
+                  <button className="bg-purple-800 p-2 rounded-lg flex hover:bg-gray-700 items-center transition">
                     <UserPlus
                       className="text-gray-300 mr-2 hover:text-white transition"
                       size={20}
@@ -101,7 +123,7 @@ const Navbar = () => {
               to="/about"
               className="text-gray-300 hover:text-white transition"
             >
-              Home
+              About
             </Link>
             <Link
               to="/login"

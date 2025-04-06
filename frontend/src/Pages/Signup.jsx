@@ -52,16 +52,20 @@ const Signup = () => {
         name: formData.fullName,
         email: formData.email,
         password: formData.password,
-      });
-    console.log(response.data);
-      if (response.status === 200) {
+      },
+      {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+      console.log(response.data);
+      if (response.status === 201) {
         handleSuccess("Account Created Successfully");
       }
       navigate("/login");
+      console.log("Form Submitted:", formData);
     } catch (error) {
       handleError(error?.response?.data?.message || "Signup failed");
     }
-    console.log("Form Submitted:", formData);
     // Proceed with form submission (e.g., API call)
   };
 

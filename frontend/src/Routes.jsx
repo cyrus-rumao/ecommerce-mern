@@ -8,20 +8,33 @@ import {
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
-// import useAuthGuard from "./useAuthGuard"; // Importing auth guard
-
+import { useAuth } from "./lib/AuthContext";
+// import { useState } from "react";
+// import { checkAuth } from "./lib/axiosInstance";
+// import axiosInstance from "./lib/axiosInstance";
 const Routers = () => {
-  // const isLoading = useAuthGuard(); // Call useAuthGuard to handle authentication redirects
+  const { currentUser } = useAuth(); // Authenticated user
+  // const [user, setUser] = useState(null); // Authenticated user
+  console.log("Currwent User from Routers:", currentUser);
+  // const [loading, setLoading] = useState(true); // Auth check loading state
 
-  // if (isLoading) return null; // Prevent UI flickering while checking authentication
-
+  // console.log(user);
+  // if (loading) return <div>Loading...</div>;
+  // console.log("User from Routers:", user);
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      {/* Catch-all route to redirect unknown routes */}
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route
+        path="/"
+        element={currentUser ? <Home /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/signup"
+        element={!currentUser ? <Signup /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/login"
+        element={!currentUser ? <Login /> : <Navigate to="/" />}
+      />
     </Routes>
   );
 };
