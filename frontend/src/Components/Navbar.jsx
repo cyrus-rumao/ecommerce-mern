@@ -1,160 +1,91 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, use } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import cat from "/assets/bag.svg";
-import {
-  Menu,
-  X,
-  ShoppingBag,
-  MonitorCog,
-  LogOut,
-  LogIn,
-  UserPlus,
-  ShoppingCart,
-} from "lucide-react";
-import axiosInstance, { checkAuth } from "../lib/axiosInstance"; // Import the checkAuth function
-// import { useAuth } from "../lib/AuthContext";
-import { useAuth } from "../lib/AuthContext"; // Import the AuthContext
+import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
 
 const Navbar = () => {
-  const { currentUser, setCurrentUser } = useAuth(); // Authenticated user
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  // const [cartCount, setCartCount] = useState(0); // Cart count state
-  // Admin state
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [count, setCount] = useState(); // Cart count
-  const { cartCount } = useAuth();
-  // const [currentUser, setCurrentUser] = useState(null); // Authenticated user
-  // if (user) {
-  //   setCurrentUser(user); // Set the authenticated user
-  // }
-  // console.log("Current User from Navbar:", currentUser);
-  const admin = currentUser && currentUser.role === "admin" ? true : false; // Check if the user is an admin
-  // console.log("User from Navbar:", user);
-  // setUser(user); // Set the authenticated user
-  const handleLogout = async () => {
-    try {
-      await axiosInstance.post("/auth/logout", {});
-      setCurrentUser(null);
-      navigate("/login");
-      console.log("logged out");
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  };
-  
-  if (currentUser && currentUser.role === "customer") {
-    // Fetch cart items for admin user
+	const { user, logout } = useUserStore();
+	const isAdmin = user?.role === "admin";
+	const { cart } = useCartStore();
 
-    
-  }
-  // setCurrentUser(user); // Set the authenticated user
-  return (
-    <header>
-      <nav className="bg-gray-900 text-white p-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link
-            to="/"
-            className="text-2xl  flex font-bold text-gray-200 hover:text-white"
-          >
-            <img src={cat} alt="" className="w-8 h-8" />
-            ShopSphere
-          </Link>
-          <div className="hidden md:flex space-x-6 justify-center items-center">
-            <Link
-              to="/"
-              className="text-gray-300 hover:text-white transition font-[Times Roman] font-bold"
-            >
-              Home
-            </Link>
-            {currentUser && !admin && (
-              <Link to="/cart" className="relative">
-                <button className="text-gray-300 hover:text-white transition text-semibold p-2 rounded-xl flex items-center hover:cursor-pointer">
-                  <ShoppingCart className="text-gray-300" />
-                  <span className="px-2">Cart</span>
-                  {
-                    <span className="absolute -top-2 -left-2 bg-purple-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                      {cartCount}
-                    </span>
-                  }
-                </button>
-              </Link>
-            )}
-            {currentUser && admin && (
-              <Link to="/dashboard">
-                <button className="text-gray-300 hover:text-white transition bg-purple-700 hover:bg-purple-800 text-semibold p-2 rounded-xl flex">
-                  <MonitorCog className="mr-2 text-black" />
-                  Dashboard
-                </button>
-              </Link>
-            )}
-            {currentUser ? (
-              <button
-                className="bg-gray-800 p-2 flex rounded-lg hover:bg-gray-700 items-center transition hover:cursor-pointer"
-                onClick={handleLogout}
-                type="button"
-              >
-                <LogOut
-                  className="text-gray-300 hover:text-white transition"
-                  size={20}
-                />
-                <span className="font-semibold">Logout</span>
-              </button>
-            ) : (
-              <>
-                <Link to="/login">
-                  <button className="bg-gray-800 p-2 rounded-lg flex hover:bg-gray-700 items-center transition">
-                    <LogIn
-                      className="text-gray-300 mr-2 hover:text-white transition"
-                      size={20}
-                    />
-                    <span className="font-semibold mx-auto">Login</span>
-                  </button>
-                </Link>
-                <Link to="/signup">
-                  <button className="bg-purple-800 p-2 rounded-lg flex hover:bg-gray-700 items-center transition">
-                    <UserPlus
-                      className="text-gray-300 mr-2 hover:text-white transition"
-                      size={20}
-                    />
-                    <span className="font-semibold mx-auto">Signup</span>
-                  </button>
-                </Link>
-              </>
-            )}
-          </div>
-          <button
-            className="md:hidden text-gray-300"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
-        {isOpen && (
-          <div className="md:hidden flex flex-col space-y-4 p-4 bg-gray-800 border-t border-gray-700">
-            <Link
-              to="/about"
-              className="text-gray-300 hover:text-white transition"
-            >
-              About
-            </Link>
-            <Link
-              to="/login"
-              className="text-gray-300 hover:text-white transition"
-            >
-              L
-              
-              to="/signup"
-              className="text-gray-300 hover:text-white transition"
-            >
-              Signup
-            </Link>
-          </div>
-        )}
-      </nav>
-    </header>
-  );
+	return (
+		<header className='fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 backdrop-blur-md shadow-lg z-40 transition-all duration-300 border-b border-emerald-800'>
+			<div className='container mx-auto px-4 py-3'>
+				<div className='flex flex-wrap justify-between items-center'>
+					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
+						E-Commerce
+					</Link>
+
+					<nav className='flex flex-wrap items-center gap-4'>
+						<Link
+							to={"/"}
+							className='text-gray-300 hover:text-emerald-400 transition duration-300
+					 ease-in-out'
+						>
+							Home
+						</Link>
+						{user && (
+							<Link
+								to={"/cart"}
+								className='relative group text-gray-300 hover:text-emerald-400 transition duration-300 
+							ease-in-out'
+							>
+								<ShoppingCart className='inline-block mr-1 group-hover:text-emerald-400' size={20} />
+								<span className='hidden sm:inline'>Cart</span>
+								{cart.length > 0 && (
+									<span
+										className='absolute -top-2 -left-2 bg-emerald-500 text-white rounded-full px-2 py-0.5 
+									text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out'
+									>
+										{cart.length}
+									</span>
+								)}
+							</Link>
+						)}
+						{isAdmin && (
+							<Link
+								className='bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium
+								 transition duration-300 ease-in-out flex items-center'
+								to={"/secret-dashboard"}
+							>
+								<Lock className='inline-block mr-1' size={18} />
+								<span className='hidden sm:inline'>Dashboard</span>
+							</Link>
+						)}
+
+						{user ? (
+							<button
+								className='bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 
+						rounded-md flex items-center transition duration-300 ease-in-out'
+								onClick={logout}
+							>
+								<LogOut size={18} />
+								<span className='hidden sm:inline ml-2'>Log Out</span>
+							</button>
+						) : (
+							<>
+								<Link
+									to={"/signup"}
+									className='bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 
+									rounded-md flex items-center transition duration-300 ease-in-out'
+								>
+									<UserPlus className='mr-2' size={18} />
+									Sign Up
+								</Link>
+								<Link
+									to={"/login"}
+									className='bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 
+									rounded-md flex items-center transition duration-300 ease-in-out'
+								>
+									<LogIn className='mr-2' size={18} />
+									Login
+								</Link>
+							</>
+						)}
+					</nav>
+				</div>
+			</div>
+		</header>
+	);
 };
-
 export default Navbar;

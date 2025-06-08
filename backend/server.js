@@ -2,13 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import path from "path";
-
-import authRoutes from "./routes/auth.route.js";
-import productRoutes from "./routes/product.route.js";
-import cartRoutes from "./routes/cart.route.js";
-import couponRoutes from "./routes/coupon.route.js";
-import paymentRoutes from "./routes/payment.route.js";
-import analyticsRoutes from "./routes/analytics.route.js";
+import cors from "cors";
+import authRoutes from "./Routes/authRoute.js";
+import productRoutes from "./routes/prodRoute.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import couponRoutes from "./routes/couponRoute.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoute.js";
 
 import { connectDB } from "./lib/db.js";
 
@@ -18,7 +18,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const __dirname = path.resolve();
-
+app.use(cors({
+	origin: process.env.CLIENT_URL,
+	credentials: true, // Allow cookies to be sent
+}));
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
