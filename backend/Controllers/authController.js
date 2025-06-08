@@ -64,7 +64,7 @@ export const signup = async (req, res) => {
 
     setCookies(res, accessToken, refreshToken);
 
-    res.status(201).json({
+    return res.status(201).json({
       _id: user._id,
       name: user.name,
       password: user.password,
@@ -73,7 +73,7 @@ export const signup = async (req, res) => {
     });
     await newUser.save();
   } catch (error) {
-    res.status(500).json({ message: "Error in Auth Controller" });
+    return res.status(500).json({ message: "Error in Auth Controller" });
   }
 };
 // export const login = async (req, res) => {
@@ -112,15 +112,15 @@ export const login = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    console.log("Generating Tokens! for User: ❌",email);
+    console.log("Generating Tokens! for User: ❌", email);
     // Generate access & refresh tokens
     const { accessToken, refreshToken } = generateTokens(existinguser._id);
-    console.log("Storing Tokens for ❌",email);
+    console.log("Storing Tokens for ❌", email);
     await storeRefreshToken(refreshToken, existinguser._id);
     // Set cookies properly
     setCookies(res, accessToken, refreshToken);
     // res.cookie("Hello", "World", { httpOnly: true });
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successful",
       success: true,
       user: {
@@ -132,7 +132,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in login Controller:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

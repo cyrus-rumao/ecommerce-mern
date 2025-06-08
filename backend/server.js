@@ -1,41 +1,43 @@
 import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import authRoute from "./Routes/authRoute.js";
-import prodRoute from "./Routes/prodRoute.js";
-import cartRoutes from "./Routes/cartRoutes.js";
-import couponRoutes from "./Routes/couponRoute.js"
-import paymentRoutes from "./Routes/paymentRoutes.js"
-import analyticsRoute from "./Routes/analyticsRoute.js"
-
 import dotenv from "dotenv";
-import { connectDB } from "./Config/db.js";
+import cookieParser from "cookie-parser";
+import path from "path";
+
+import authRoutes from "./routes/auth.route.js";
+import productRoutes from "./routes/product.route.js";
+import cartRoutes from "./routes/cart.route.js";
+import couponRoutes from "./routes/coupon.route.js";
+import paymentRoutes from "./routes/payment.route.js";
+import analyticsRoutes from "./routes/analytics.route.js";
+
+import { connectDB } from "./lib/db.js";
+
 dotenv.config();
-connectDB();
 
-const PORT = process.env.PORT;
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
-}));
+const __dirname = path.resolve();
+
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
-app.use(express.json());
 
-app.get("/hello", (req, res) => {
-  res.send("world");
-});
-// res.cookie("test", "HelloWorld", { httpOnly: true });
-app.use("/api/auth", authRoute);
-app.use("/api/products", prodRoute);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/coupons", couponRoutes)
-app.use("/api/payment", paymentRoutes)
-app.use("/api/analytics", analyticsRoute)
+app.use("/api/coupons", couponRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+	console.log("Server is running on http://localhost:" + PORT);
+	connectDB();
 });

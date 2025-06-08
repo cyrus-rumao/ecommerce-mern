@@ -73,6 +73,7 @@ axiosInstance.interceptors.response.use(
 // 💡 Check if user is authenticated and return their profile
 
 export default axiosInstance;
+
 export const checkAuth = async () => {
   try {
     const res = await axiosInstance.get("/auth/profile");

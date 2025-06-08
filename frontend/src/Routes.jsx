@@ -9,23 +9,26 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import { useAuth } from "./lib/AuthContext";
+import Cart from "./Pages/Cart";
+import LoadingSpinner from "./Components/LoadingSpinner";
 // import { useState } from "react";
 // import { checkAuth } from "./lib/axiosInstance";
 // import axiosInstance from "./lib/axiosInstance";
 const Routers = () => {
   const { currentUser } = useAuth(); // Authenticated user
   // const [user, setUser] = useState(null); // Authenticated user
-  console.log("Currwent User from Routers:", currentUser);
+  // console.log("Currwent User from Routers:", currentUser);
   // const [loading, setLoading] = useState(true); // Auth check loading state
 
   // console.log(user);
-  // if (loading) return <div>Loading...</div>;
-  // console.log("User from Routers:", user);
+  
+  // console.log(loading)
+  //  console.log("User from Routers:", currentUser);
   return (
     <Routes>
       <Route
         path="/"
-        element={currentUser ? <Home /> : <Navigate to="/login" />}
+        element={currentUser ? <Home user={currentUser} /> : <Navigate to="/login" />}
       />
       <Route
         path="/signup"
@@ -33,8 +36,15 @@ const Routers = () => {
       />
       <Route
         path="/login"
-        element={!currentUser ? <Login /> : <Navigate to="/" />}
+        element={!currentUser ? <Login/> : <Navigate to="/" />}
       />
+      <Route
+        path="/cart"
+        element={!currentUser ? <Login /> : <Cart />}
+      />
+      <Route
+        path='*'
+      element={<Navigate to="/" />}/>
     </Routes>
   );
 };

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import cat from "/assets/bag.svg";
 import {
   Menu,
   X,
@@ -12,21 +13,24 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import axiosInstance, { checkAuth } from "../lib/axiosInstance"; // Import the checkAuth function
-import axios from "axios";
-import { useAuth } from "../lib/authContext"; // Import the AuthContext
+// import { useAuth } from "../lib/AuthContext";
+import { useAuth } from "../lib/AuthContext"; // Import the AuthContext
 
 const Navbar = () => {
   const { currentUser, setCurrentUser } = useAuth(); // Authenticated user
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // Assuming this is determined from the backend
+  // const [cartCount, setCartCount] = useState(0); // Cart count state
+  // Admin state
   const [loggedIn, setLoggedIn] = useState(false);
-  const [count, setCount] = useState(3); // Cart count
+  const [count, setCount] = useState(); // Cart count
+  const { cartCount } = useAuth();
   // const [currentUser, setCurrentUser] = useState(null); // Authenticated user
   // if (user) {
   //   setCurrentUser(user); // Set the authenticated user
   // }
-
+  // console.log("Current User from Navbar:", currentUser);
+  const admin = currentUser && currentUser.role === "admin" ? true : false; // Check if the user is an admin
   // console.log("User from Navbar:", user);
   // setUser(user); // Set the authenticated user
   const handleLogout = async () => {
@@ -39,6 +43,12 @@ const Navbar = () => {
       console.error("Logout failed:", err);
     }
   };
+  
+  if (currentUser && currentUser.role === "customer") {
+    // Fetch cart items for admin user
+
+    
+  }
   // setCurrentUser(user); // Set the authenticated user
   return (
     <header>
@@ -46,28 +56,32 @@ const Navbar = () => {
         <div className="container mx-auto flex justify-between items-center">
           <Link
             to="/"
-            className="text-2xl font-bold text-gray-200 hover:text-white"
+            className="text-2xl  flex font-bold text-gray-200 hover:text-white"
           >
+            <img src={cat} alt="" className="w-8 h-8" />
             ShopSphere
           </Link>
           <div className="hidden md:flex space-x-6 justify-center items-center">
-            <Link to="/" className="text-gray-300 hover:text-white transition">
+            <Link
+              to="/"
+              className="text-gray-300 hover:text-white transition font-[Times Roman] font-bold"
+            >
               Home
             </Link>
-            {currentUser && (
+            {currentUser && !admin && (
               <Link to="/cart" className="relative">
-                <button className="text-gray-300 hover:text-white transition text-semibold p-2 rounded-xl flex items-center">
+                <button className="text-gray-300 hover:text-white transition text-semibold p-2 rounded-xl flex items-center hover:cursor-pointer">
                   <ShoppingCart className="text-gray-300" />
                   <span className="px-2">Cart</span>
-                  {count > 0 && (
+                  {
                     <span className="absolute -top-2 -left-2 bg-purple-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                      {count}
+                      {cartCount}
                     </span>
-                  )}
+                  }
                 </button>
               </Link>
             )}
-            {currentUser && isAdmin && (
+            {currentUser && admin && (
               <Link to="/dashboard">
                 <button className="text-gray-300 hover:text-white transition bg-purple-700 hover:bg-purple-800 text-semibold p-2 rounded-xl flex">
                   <MonitorCog className="mr-2 text-black" />
@@ -77,7 +91,7 @@ const Navbar = () => {
             )}
             {currentUser ? (
               <button
-                className="bg-gray-800 p-2 flex rounded-lg hover:bg-gray-700 items-center transition"
+                className="bg-gray-800 p-2 flex rounded-lg hover:bg-gray-700 items-center transition hover:cursor-pointer"
                 onClick={handleLogout}
                 type="button"
               >
@@ -129,9 +143,8 @@ const Navbar = () => {
               to="/login"
               className="text-gray-300 hover:text-white transition"
             >
-              Login
-            </Link>
-            <Link
+              L
+              
               to="/signup"
               className="text-gray-300 hover:text-white transition"
             >

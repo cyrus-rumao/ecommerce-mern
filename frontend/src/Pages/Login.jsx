@@ -85,6 +85,7 @@ const Login = () => {
               required
             />
             <button
+              tabIndex={-1}
               type="button"
               onClick={handleTogglePassword}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"

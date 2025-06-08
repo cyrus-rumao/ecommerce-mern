@@ -44,7 +44,7 @@ const Signup = () => {
     }
     if (formData.password !== formData.confirmPassword) {
       // console.log(formData)
-      handleError("Passwords Dont Match");
+      handleError("Passwords Don't Match");
       return;
     }
     try {
@@ -114,6 +114,7 @@ const Signup = () => {
               className="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:border-purple-400 focus:outline-none"
             />
             <button
+              tabIndex={-1}
               type="button"
               onClick={handleTogglePassword}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"

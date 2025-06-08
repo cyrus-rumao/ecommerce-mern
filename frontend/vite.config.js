@@ -1,17 +1,13 @@
-// Purpose: Vite configuration file for the frontend.
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import tailwindConfig from './tailwind.config.js' // Import Tailwind config
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(tailwindConfig), react()],
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:8080",
-      }
-    }
-  }
-})
+	plugins: [react()],
+	server: {
+		proxy: {
+			"/api": {
+				target: "http://localhost:5000",
+			},
+		},
+	},
+});

@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-mern",
+  "version": "1.0.0",
+  "description": "ShopSphere is a high-performance, feature-rich e-commerce application built using the MERN stack. It provides a seamless shopping experience with secure payment processing, dynamic coupon integration, admin management, and insightful analytics — all wrapped in a sleek, responsive UI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyr050206/ecommerce-mern.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyr050206/ecommerce-mern/issues"
+  },
+  "homepage": "https://github.com/cyr050206/ecommerce-mern#readme"
+}
