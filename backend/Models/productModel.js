@@ -3,7 +3,10 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
-    image: { type: [String], required: [true, "Image is required"] },
+    images: {
+        secure_url: { type: String, required: [true, "Image is required"] },
+        public_id: { type: String, required: [true, "Image is required"] }
+    },
     category: { type: String, required: true },
     isFeatured: { type: Boolean, default: false },
     // inStock: { type: Number, required: true, min: 0 },

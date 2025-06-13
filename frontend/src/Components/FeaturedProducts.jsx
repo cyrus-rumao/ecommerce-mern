@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
-
+import { handleError } from "../lib/utils";
+import { useUserStore } from "../stores/useUserStore";
 const FeaturedProducts = ({ featuredProducts }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [itemsPerPage, setItemsPerPage] = useState(4);
-
+	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
-
+	
 	useEffect(() => {
 		const handleResize = () => {
 			if (window.innerWidth < 640) setItemsPerPage(1);
@@ -15,16 +16,17 @@ const FeaturedProducts = ({ featuredProducts }) => {
 			else if (window.innerWidth < 1280) setItemsPerPage(3);
 			else setItemsPerPage(4);
 		};
-
+		
 		handleResize();
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
-
+	
 	const nextSlide = () => {
 		setCurrentIndex((prevIndex) => prevIndex + itemsPerPage);
 	};
-
+	
+	
 	const prevSlide = () => {
 		setCurrentIndex((prevIndex) => prevIndex - itemsPerPage);
 	};
@@ -47,7 +49,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 									<div className='bg-white bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
 										<div className='overflow-hidden'>
 											<img
-												src={product.image}
+												src={product.images.secure_url}
 												alt={product.name}
 												className='w-full h-48 object-cover transition-transform duration-300 ease-in-out hover:scale-110'
 											/>
@@ -58,8 +60,14 @@ const FeaturedProducts = ({ featuredProducts }) => {
 												${product.price.toFixed(2)}
 											</p>
 											<button
-												onClick={() => addToCart(product)}
-												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
+												onClick= {
+													user?
+														()=>addToCart(product)
+														: () => {
+													window.location.href = "/login";
+													handleError("Please login to add products to cart",);
+												}}
+												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300
 												flex items-center justify-center'
 											>
 												<ShoppingCart className='w-5 h-5 mr-2' />
