@@ -6,7 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
 
 const stripePromise = loadStripe(
-	"pk_test_51KZYccCoOZF2UhtOwdXQl3vcizup20zqKqT9hVUIsVzsdBrhqbUI2fE0ZdEVLdZfeHjeyFXtqaNsyCJCmZWnjNZa00PzMAjlcL"
+  "pk_test_51R6Dzg2N6v8A12Cx0S4oTyJ0G4B9wgNHOphQ14norKQOhXNxvLpx97E0Vi9YWimS5EJve3fO1M7qAxMGYMKCbTIa00dajq8Sdh"
 );
 
 const OrderSummary = () => {
@@ -16,10 +16,13 @@ const OrderSummary = () => {
 	const formattedSubtotal = subtotal.toFixed(2);
 	const formattedTotal = total.toFixed(2);
 	const formattedSavings = savings.toFixed(2);
-
+	// console.log("Cart ", cart);
+	//  console.log("Subtotal ", subtotal);
+	//  console.log("Coupon ", coupon);
 	const handlePayment = async () => {
 		const stripe = await stripePromise;
 		const res = await axios.post("/payments/create-checkout-session", {
+		
 			products: cart,
 			couponCode: coupon ? coupon.code : null,
 		});

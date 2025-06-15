@@ -22,17 +22,20 @@ export const AuthProvider = ({ children }) => {
 
     async () => {
       try {
-        const response = await axios.get("http://localhost:8080i/api/cart/", { 
-        }
+        const response = await axios.get(
+          "http://localhost:8080i/api/cart/",
+          {}
         );
         setCount(response.data.length);
       } catch (error) {
-        console.error("Failed to fetch cart items",error);
+        console.error("Failed to fetch cart items", error);
       }
     };
   }
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser, loading,cartCount }}>
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, loading, cartCount }}
+    >
       {children}
     </AuthContext.Provider>
   );

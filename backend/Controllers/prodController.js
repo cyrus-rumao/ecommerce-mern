@@ -138,8 +138,8 @@ export const toggleFeatured = async (req, res) => {
     } else {
       product.isFeatured = !product.isFeatured;
       const updatedProduct = await product.save();
-      return updateFeaturedProductsCache();
-      res.json(updatedProduct);
+      updateFeaturedProductsCache();
+      return res.json(updatedProduct);
       return res.status(200).json({ message: "Product updated successfully" });
     }
   } catch (error) {

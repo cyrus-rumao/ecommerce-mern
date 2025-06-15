@@ -6,21 +6,45 @@ export const getAnalytics = async (req, res) => {
     const analyticsData = await getAnalyticsData();
 
     const startdate = new Date();
-    const endDate = new Date(startdate.getTime() + 7 * 24 * 60 * 60 * 1000);
-
+    startdate.setUTCHours(0, 0, 0, 0); // Set to the start of the day
+    const endDate = new Date();
+    endDate.setUTCDate(startdate.getUTCDate() + 7); // Set to 7 days later
+    endDate.setUTCHours(23, 59, 59, 999); // Set to the end of the day
+    // console.log("Start Date:", startdate);
+    // console.log("End Date:", endDate);
     const dailySales = await getDailySalesData(startdate, endDate);
-
-    res.json({ analyticsData, dailySales });
+    console.log(dailySales);
+    return res.json({ analyticsData, dailySales });
   } catch (error) {
     console.log("Error in Analytics Route", error);
-    res.status(500).json({ message: "Analytics Route Error" });
+    return res.status(500).json({ message: "Analytics Route Error" });
   }
 };
 
 const getAnalyticsData = async () => {
-  const totalUsers = await User.countDocuments({});
-  const totalProducts = await Product.countDocuments({});
+  const totalUsersWithOrders = await User.aggregate([
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "user",
+        as: "orders",
+      },
+    },
+    {
+      $match: {
+        "orders.0": { $exists: true }, // only users with at least 1 order
+      },
+    },
+    {
+      $count: "count",
+    },
+  ]);
 
+  const totalUsers = totalUsersWithOrders[0]?.count || 0;
+  
+  const totalProducts = await Product.countDocuments({});
+  // console.log(totalUsers, totalProducts);
   const salesData = await Order.aggregate([
     {
       $group: {
@@ -44,6 +68,13 @@ const getAnalyticsData = async () => {
 };
 export const getDailySalesData = async (startDate, endDate) => {
   try {
+    console.log(
+      "Matching Orders From",
+      startDate.toISOString(),
+      "To",
+      endDate.toISOString()
+    );
+
     const dailySales = await Order.aggregate([
       {
         $match: {
@@ -62,12 +93,12 @@ export const getDailySalesData = async (startDate, endDate) => {
       },
       { $sort: { _id: 1 } },
     ]);
-
+    // console.log(dailySales);
     const dateArray = getDateArray(startDate, endDate);
-    console.log(dateArray);
+    // console.log(dateArray);
 
     return dateArray.map((date) => {
-      const foundData = dailySales.find((item) => item._id == date);
+      const foundData = dailySales.find((item) => item._id === date);
       return {
         date,
         sales: foundData ? foundData.totalSales : 0,
@@ -86,5 +117,6 @@ function getDateArray(startDate, endDate) {
     dateArray.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
+  console.log(dateArray);
   return dateArray;
 }
