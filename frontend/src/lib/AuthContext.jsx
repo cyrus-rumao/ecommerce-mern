@@ -17,9 +17,8 @@ export const AuthProvider = ({ children }) => {
     verify();
   }, []);
 
+  // Fetch cart count for customer role
   if (currentUser && currentUser.role === "customer") {
-    // Fetch cart items for admin user
-
     async () => {
       try {
         const response = await axios.get(

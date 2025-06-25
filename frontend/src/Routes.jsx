@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import {
   Navigate,
   Routes,
@@ -10,7 +10,7 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import { useAuth } from "./lib/AuthContext";
 import Cart from "./Pages/Cart";
-import LoadingSpinner from "./Components/LoadingSpinner";
+// import LoadingSpinner from "./Components/LoadingSpinner";
 // import { useState } from "react";
 // import { checkAuth } from "./lib/axiosInstance";
 // import axiosInstance from "./lib/axiosInstance";
@@ -44,7 +44,7 @@ const Routers = () => {
       />
       <Route
         path='*'
-      element={<Navigate to="/" />}/>
+      element={<Home/>}/>
     </Routes>
   );
 };

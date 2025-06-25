@@ -70,7 +70,6 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// 💡 Check if user is authenticated and return their profile
 
 export default axiosInstance;
 

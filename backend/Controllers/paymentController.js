@@ -82,7 +82,7 @@ export const createCheckoutSession = async (req, res) => {
     console.log("Session created:", session.id);
     console.log("Total Amount: ", totalAmount)
     if (totalAmount >= 50000) {
-      // console.log("User ID, ",req.user._id);
+ 
       await createNewCoupon(req.user._id);
     }
 

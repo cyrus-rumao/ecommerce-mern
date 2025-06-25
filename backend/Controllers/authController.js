@@ -11,8 +11,6 @@ const generateTokens = (userId) => {
   const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
-  console.log("Access Token: ", accessToken);
-  console.log("Reresh Token: ", refreshToken);
   return { accessToken, refreshToken };
 };
 
@@ -30,18 +28,17 @@ const storeRefreshToken = async (refreshToken, userId) => {
 };
 
 const setCookies = (res, accessToken, refreshToken) => {
-  // res.cookie("test", "HelloWorld", { httpOnly: true });
   res.cookie("accessToken", accessToken, {
     httpOnly: true, //prevent xss attacks
-    secure: process.env.NODE_ENV === "production" ? true : false, // cannot be accessed by client side scripts it will be tru only if NODE_ENV is production
-    sameSite: "lax", //  prevents cross side forgery attack
-    maxAge: 15 * 60 * 1000, //minutes*seconds *milliseconds
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: "lax",
+    maxAge: 15 * 60 * 1000,
   }),
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true, //prevent xss attacks
-      secure: process.env.NODE_ENV === "production" ? true : false, // cannot be accessed by client side scripts it will be tru only if NODE_ENV is production
-      sameSite: "lax", //  prevents cross side forgery attack
-      maxAge: 7 * 24 * 60 * 60 * 1000, //days*hours*minutes*seconds *milliseconds
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 };
 
@@ -55,16 +52,15 @@ export const signup = async (req, res) => {
         .json({ message: "User already exists", success: false });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    // req.body.password = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword }); //stupid mistake
-    // newUser.password = await bcrypt.hash(password, 10);
+
+    const user = await User.create({ name, email, password: hashedPassword });
 
     const { accessToken, refreshToken } = generateTokens(user._id);
     await storeRefreshToken(refreshToken, user._id);
 
     setCookies(res, accessToken, refreshToken);
 
-    return res.status(201).json({
+    res.status(201).json({
       _id: user._id,
       name: user.name,
       password: user.password,
@@ -76,31 +72,6 @@ export const signup = async (req, res) => {
     return res.status(500).json({ message: "Error in Auth Controller" });
   }
 };
-// export const login = async (req, res) => {
-//   //   const errormsg /= "Invalid credentials";
-//   try {
-//     const { email, password } = req.body;
-//     const user = await User.findOne({ email });
-//     if (user && (await bcrypt.compare(password, user.password))) {
-//       const { accessToken, refreshToken } = generateTokens(user._id);
-//       await storeRefreshToken(refreshToken, user._id);
-//       setCookies(res, accessToken, refreshToken);
-//       return res.status(200).json({
-//         _id: user._id,
-//         name: user.name,
-//         email: user.email,
-//         role: user.role,
-//         message: "Login successful",
-//         success: true,
-//       });
-//     }
-//     return res.status(400).json({ message: "Invalid credentials" });
-//   } catch (error) {
-//     console.log("Error in login Controller", error);
-//     return res.status(500).json({ message: error.message });
-//   }
-// };
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -112,14 +83,14 @@ export const login = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    console.log("Generating Tokens! for User: ❌", email);
-    // Generate access & refresh tokens
+    // console.log("Generating Tokens! for User: ❌", email);
+
     const { accessToken, refreshToken } = generateTokens(existinguser._id);
-    console.log("Storing Tokens for ❌", email);
+    // console.log("Storing Tokens for ❌", email);
     await storeRefreshToken(refreshToken, existinguser._id);
-    // Set cookies properly
+
     setCookies(res, accessToken, refreshToken);
-    // res.cookie("Hello", "World", { httpOnly: true });
+
     return res.status(200).json({
       message: "Login successful",
       success: true,

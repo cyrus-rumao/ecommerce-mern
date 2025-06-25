@@ -38,7 +38,6 @@ export const removeAllFromCart = async (req, res) => {
       user.cartItems = user.cartItems.filter(
         (item) => item?.product?.toString() !== productId.toString()
       );
-      //item has product and quantity field not the productId fiels. So we find first the product and then its id
     }
     await user.save();
     res.json(user.cartItems);
@@ -75,7 +74,7 @@ export const getCart = async (req, res) => {
 
     res.json(detailedCart);
   } catch (error) {
-    console.error("💥 Error in getCart:", error.message);
+    console.error("Error in getCart:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -85,8 +84,8 @@ export const updateQuantity = async (req, res) => {
     const { id: productId } = req.params;
     const { quantity } = req.body;
     const user = req.user;
-    const existingItem = user.cartItems.find((item) =>
-      item?.product?.toString() === productId.toString()
+    const existingItem = user.cartItems.find(
+      (item) => item?.product?.toString() === productId.toString()
     );
     if (existingItem) {
       if (quantity === 0) {

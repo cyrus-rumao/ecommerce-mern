@@ -81,35 +81,13 @@ const AnalyticsTab = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
       >
-        <ResponsiveContainer width="100%" height={400}>
-          {/* <LineChart data={dailySalesData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" stroke="#D1D5DB" />
-            <YAxis yAxisId="left" stroke="#D1D5DB" />
-            <YAxis yAxisId="right" orientation="right" stroke="#D1D5DB" />
-            <Tooltip />
-            <Legend />
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="sales"
-              stroke="#10B981"
-              activeDot={{ r: 8 }}
-              name="Sales"
-            />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="revenue"
-              stroke="#3B82F6"
-              activeDot={{ r: 8 }}
-              name="Revenue"
-            />
-          </LineChart> */}
+        <ResponsiveContainer width="100%" height={400} fill="#00000000"
+          className="rounded-lg overflow-hidden">
           <BarChart
+            backdropFilter="blur(100px)"
             data={dailySalesData}
             // margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            activeBar={{ fill: "#000000", stroke: "#10B981", strokeWidth: 2 }}
+            activeBar={{ fill: "#00000000", stroke: "#10B981", strokeWidth: 2 }}
             barCategoryGap={0}
           >
             <CartesianGrid strokeDasharray={3} />
@@ -118,11 +96,11 @@ const AnalyticsTab = () => {
             <YAxis yAxisId="right" orientation="right" stroke="#D1D5DB" />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#12794d",
+                backgroundColor: "#000000",
                 borderColor: "#374151",
                 backdropFilter: "blur(100px)",
-                borderRadius: "8px",
-                color: "#D1D5DB",
+                borderRadius: "18px",
+                color: "#f6f6f6",
                 transparent: true,
               }}
             />
@@ -130,7 +108,7 @@ const AnalyticsTab = () => {
             <Bar
               yAxisId="left"
               dataKey="sales"
-              fill="#10B981"
+              fill="#01b174"
               name="Sales"
               radius={[4, 4, 0, 0]}
               activeBar={{ fill: "#059669", stroke: "#10B981", strokeWidth: 2 }}
@@ -138,7 +116,7 @@ const AnalyticsTab = () => {
             <Bar
               yAxisId="right"
               dataKey="revenue"
-              fill="#3B82F2"
+              fill="#285ca7"
               name="Revenue"
               radius={[4, 4, 0, 0]}
             />

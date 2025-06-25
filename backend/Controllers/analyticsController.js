@@ -5,15 +5,17 @@ export const getAnalytics = async (req, res) => {
   try {
     const analyticsData = await getAnalyticsData();
 
-    const startdate = new Date();
-    startdate.setUTCHours(0, 0, 0, 0); // Set to the start of the day
     const endDate = new Date();
-    endDate.setUTCDate(startdate.getUTCDate() + 7); // Set to 7 days later
-    endDate.setUTCHours(23, 59, 59, 999); // Set to the end of the day
-    // console.log("Start Date:", startdate);
-    // console.log("End Date:", endDate);
-    const dailySales = await getDailySalesData(startdate, endDate);
-    console.log(dailySales);
+    endDate.setUTCHours(23, 59, 59, 999);
+
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 7);
+    startDate.setUTCHours(0, 0, 0, 0);
+    console.log("Start Date:", startDate.toISOString());
+    console.log("End Date:", endDate.toISOString());
+
+    const dailySales = await getDailySalesData(startDate, endDate);
+
     return res.json({ analyticsData, dailySales });
   } catch (error) {
     console.log("Error in Analytics Route", error);
@@ -33,7 +35,7 @@ const getAnalyticsData = async () => {
     },
     {
       $match: {
-        "orders.0": { $exists: true }, // only users with at least 1 order
+        "orders.0": { $exists: true },
       },
     },
     {
@@ -42,13 +44,13 @@ const getAnalyticsData = async () => {
   ]);
 
   const totalUsers = totalUsersWithOrders[0]?.count || 0;
-  
+
   const totalProducts = await Product.countDocuments({});
-  // console.log(totalUsers, totalProducts);
+
   const salesData = await Order.aggregate([
     {
       $group: {
-        _id: null, //groups all documents together
+        _id: null,
         totalSales: { $sum: 1 },
         totalRevenue: { $sum: "$totalAmount" },
       },
@@ -79,8 +81,8 @@ export const getDailySalesData = async (startDate, endDate) => {
       {
         $match: {
           createdAt: {
-            $gte: startDate, //greater than start date
-            $lte: endDate, //lesser than end date
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },

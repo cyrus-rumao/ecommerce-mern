@@ -17,7 +17,7 @@ export const getCoupon = async (req, res) => {
 };
 
 export const validateCoupon = async (req, res) => {
-  console.log("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+  // console.log("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
   console.log("Validating coupon");
   try {
     const { code } = req.body;
