@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 app.use(
 	cors({
-		origin: '*',
+		origin: "https://my-ecommerce-mern-app.netlify.app/",
 		credentials: true, // Allow cookies to be sent
 	})
 );
