@@ -6,11 +6,11 @@ import LoginPage from "./pages/LoginPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 
-import Navbar from "./Components/Navbar";
+import Navbar from "./components/Navbar.jsx";
 
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
-import LoadingSpinner from "./components/LoadingSpinner";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import { useCartStore } from "./stores/useCartStore";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage.jsx";
