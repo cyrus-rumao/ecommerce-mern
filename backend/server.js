@@ -4,11 +4,11 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
 import authRoutes from './Routes/authRoute.js';
-import productRoutes from './routes/prodRoute.js';
-import cartRoutes from './routes/cartRoutes.js';
-import couponRoutes from './routes/couponRoute.js';
-import paymentRoutes from './routes/paymentRoutes.js';
-import analyticsRoutes from './routes/analyticsRoute.js';
+import productRoutes from './Routes/prodRoute.js';
+import cartRoutes from './Routes/cartRoutes.js';
+import couponRoutes from './Routes/couponRoute.js';
+import paymentRoutes from './Routes/paymentRoutes.js';
+import analyticsRoutes from './Routes/analyticsRoute.js';
 
 import { connectDB } from './Config/db.js';
 
