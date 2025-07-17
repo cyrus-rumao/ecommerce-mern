@@ -1,20 +1,20 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import HomePage from "./pages/HomePage.jsx";
-import SignUpPage from "./pages/SignUpPage";
-import LoginPage from "./Pages/LoginPage";
-import AdminPage from "./pages/AdminPage";
-import CategoryPage from "./Pages/CategoryPage";
+import SignUpPage from "./pages/SignUpPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
 
 import Navbar from "./Components/Navbar";
 
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
-import CartPage from "./Pages/CartPage";
+import CartPage from "./pages/CartPage.jsx";
 import { useCartStore } from "./stores/useCartStore";
-import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
-import PurchaseCancelPage from "./pages/PurchaseCancelPage";
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage.jsx";
+import PurchaseCancelPage from "./pages/PurchaseCancelPage.jsx";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
