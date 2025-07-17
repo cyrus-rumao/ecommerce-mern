@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://ecommerce-mern-backend-h0g6.onrender.com';
+const baseURL = 'https://ecommerce-mern-backend-h0g6.onrender.com/api';
 
 const axiosInstance = axios.create({
 	baseURL,
