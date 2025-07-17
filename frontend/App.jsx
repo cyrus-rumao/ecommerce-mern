@@ -1,20 +1,20 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import HomePage from "./pages/HomePage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import AdminPage from "./pages/AdminPage.jsx";
-import CategoryPage from "./pages/CategoryPage.jsx";
+import HomePage from "./src/pages/HomePage.jsx";
+import SignUpPage from "./src/pages/SignUpPage.jsx";
+import LoginPage from "./src/pages/LoginPage.jsx";
+import AdminPage from "./src/pages/AdminPage.jsx";
+import CategoryPage from "./src/pages/CategoryPage.jsx";
 
-import Navbar from "./components/Navbar.jsx";
+import Navbar from "./src/components/Navbar.jsx";
 
-import { useUserStore } from "./stores/useUserStore";
+import { useUserStore } from "./src/stores/useUserStore.js";
 import { useEffect } from "react";
-import LoadingSpinner from "./components/LoadingSpinner.jsx";
-import CartPage from "./pages/CartPage.jsx";
-import { useCartStore } from "./stores/useCartStore";
-import PurchaseSuccessPage from "./pages/PurchaseSuccessPage.jsx";
-import PurchaseCancelPage from "./pages/PurchaseCancelPage.jsx";
+import LoadingSpinner from "./src/components/LoadingSpinner.jsx";
+import CartPage from "./src/pages/CartPage.jsx";
+import { useCartStore } from "./src/stores/useCartStore.js";
+import PurchaseSuccessPage from "./src/pages/PurchaseSuccessPage.jsx";
+import PurchaseCancelPage from "./src/pages/PurchaseCancelPage.jsx";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
