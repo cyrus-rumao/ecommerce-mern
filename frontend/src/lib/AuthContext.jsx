@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 		async () => {
 			try {
 				const response = await axios.get(
-					'https://ecommerce-mern-332.onrender.com/api/cart/',
+					'https://ecommerce-mern-2-xtqq.onrender.com/api/cart/',
 					{}
 				);
 				setCount(response.data.length);
