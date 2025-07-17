@@ -6,7 +6,7 @@ import cloudinary from "../Config/cloudinary.js";
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find({});
-    console.log("Products", products);
+    // console.log("Products", products);
     res.json({ products });
   } catch (error) {
     res.status(404).json({ message: "This is the message" });
@@ -27,7 +27,7 @@ export const getFeaturedProducts = async (req, res) => {
     await redis.set("featured_products", JSON.stringify(featured));
     res.json(featured);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -54,22 +54,22 @@ export const createProduct = async (req, res) => {
         : null,
       category,
     });
-    console.log("Stop 1");
+    // console.log("Stop 1");
     await updateFeaturedProductsCache();
     return res.status(201).json({ product, message: "Product created successfully" });
     console.log("Product created successfully", product);
     // console.log("Product Category", product.category);
-    console.log("Stop 2");
+    // console.log("Stop 2");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    console.log("Product to delete", product);
-    console.log("product image", product.images);
+    // console.log("Product to delete", product);
+    // console.log("product image", product.images);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     } else {
@@ -78,9 +78,9 @@ export const deleteProduct = async (req, res) => {
         if (product.images?.public_id) {
           await cloudinary.uploader.destroy(product.images.public_id);
         }
-        console.log(`Deleted image from Cloudinary`);
+        // console.log(`Deleted image from Cloudinary`);
       } catch (error) {
-        console.log("Error in deleting image");
+        // console.log("Error in deleting image");
       }
       // await product.remove();
       // res.status(200).json({ message: "Product deleted successfully" });

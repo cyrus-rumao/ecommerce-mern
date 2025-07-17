@@ -10,17 +10,17 @@ export const createCheckoutSession = async (req, res) => {
   let totalAmount = 0;
   try {
     const { products, couponCode } = req.body;
-    console.log("User id: ", req.user._id);
-    console.log(products);
-    console.log("Coupon Code: ", couponCode);
+    // console.log("User id: ", req.user._id);
+    // console.log(products);
+    // console.log("Coupon Code: ", couponCode);
     if (!Array.isArray(products) || !products.length) {
       return res.status(400).json({ message: "No products provided" });
     }
     const lineItems = products.map((product) => {
       const amount = Math.round(product.price * 100);
-      console.log("Amount for product:", product.name, amount);
+      // console.log("Amount for product:", product.name, amount);
       totalAmount += amount * product.quantity;
-      console.log("Total Amount so far:", totalAmount);
+      // console.log("Total Amount so far:", totalAmount);
       return {
         price_data: {
           currency: "usd",
@@ -45,11 +45,11 @@ export const createCheckoutSession = async (req, res) => {
       if (coupon) {
         // cuuponCode = coupon.code;
         // console.log("Coupon Code:", cuuponCode);
-        console.log("Coupon found:", coupon);
+        // console.log("Coupon found:", coupon);
         totalAmount = Math.round(
           totalAmount * (1 - coupon.discountPercentage / 100)
         );
-        console.log("Total Amount after applying coupon:", totalAmount);
+        // console.log("Total Amount after applying coupon:", totalAmount);
       }
     }
     const session = await stripe.checkout.sessions.create({
@@ -78,9 +78,9 @@ export const createCheckoutSession = async (req, res) => {
         ),
       },
     });
-    console.log("Session Coupon", coupon);
-    console.log("Session created:", session.id);
-    console.log("Total Amount: ", totalAmount)
+    // console.log("Session Coupon", coupon);
+    // console.log("Session created:", session.id);
+    // console.log("Total Amount: ", totalAmount)
     if (totalAmount >= 50000) {
  
       await createNewCoupon(req.user._id);
@@ -110,7 +110,7 @@ const createStripeCoupon = async (discountPercentage) => {
 };
 
 const createNewCoupon = async (userId) => {
-  console.log("Creating new coupon for user:", userId);
+  // console.log("Creating new coupon for user:", userId);
   const newCoupon = new Coupon({
     code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,
@@ -118,20 +118,20 @@ const createNewCoupon = async (userId) => {
     userId: userId,
   });
   await newCoupon.save();
-  console.log("New coupon created:", newCoupon);
+  // console.log("New coupon created:", newCoupon);
   return newCoupon;
 };
 
 export const purchaseSuccess = async (req, res) => {
-  console.log("Coupon Code      biybkf      :", couponCode);
+  // console.log("Coupon Code      biybkf      :", couponCode);
   try {
     const { sessionId } = req.body;
-    console.log("Session ID:", sessionId);
+    // console.log("Session ID:", sessionId);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (!session) {
       return res.status(404).json({ message: "Session not found" });
     }
-    console.log("Session details:", session);
+    // console.log("Session details:", session);
     if (session.payment_status === "paid") {
       if (session.metadata.couponCode) {
         await Coupon.findOneAndUpdate(
@@ -154,7 +154,7 @@ export const purchaseSuccess = async (req, res) => {
 
       //cerate a new order
       const products = JSON.parse(session.metadata.products);
-      console.log("Products from session metadata:", products);
+      // console.log("Products from session metadata:", products);
       
       const newOrder = new Order({
         user: session.metadata.userId,

@@ -11,8 +11,8 @@ export const getAnalytics = async (req, res) => {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 7);
     startDate.setUTCHours(0, 0, 0, 0);
-    console.log("Start Date:", startDate.toISOString());
-    console.log("End Date:", endDate.toISOString());
+    // console.log("Start Date:", startDate.toISOString());
+    // console.log("End Date:", endDate.toISOString());
 
     const dailySales = await getDailySalesData(startDate, endDate);
 
@@ -70,12 +70,12 @@ const getAnalyticsData = async () => {
 };
 export const getDailySalesData = async (startDate, endDate) => {
   try {
-    console.log(
-      "Matching Orders From",
-      startDate.toISOString(),
-      "To",
-      endDate.toISOString()
-    );
+    // console.log(
+    //   "Matching Orders From",
+    //   startDate.toISOString(),
+    //   "To",
+    //   endDate.toISOString()
+    // );
 
     const dailySales = await Order.aggregate([
       {
@@ -119,6 +119,6 @@ function getDateArray(startDate, endDate) {
     dateArray.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  console.log(dateArray);
+  // console.log(dateArray);
   return dateArray;
 }

@@ -40,7 +40,7 @@ const CreateProductForm = () => {
         images: "",
 	  });
     } catch (error) {
-      console.log("error creating a product", error);
+      // console.log("error creating a product", error);
     }
   };
 
