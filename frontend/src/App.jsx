@@ -11,7 +11,7 @@ import Navbar from './components/Navbar.jsx';
 import { useUserStore } from './stores/useUserStore.js';
 import { useEffect } from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
-import CartPage from './pages/CartPage.js';
+import CartPage from './pages/CartPage';
 import { useCartStore } from './stores/useCartStore.js';
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage';
 import PurchaseCancelPage from './pages/PurchaseCancelPage';
