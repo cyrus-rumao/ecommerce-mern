@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import HomePage from './pages/HomePage';
-import SignUpPage from './pages/SignUpPage';
-import LoginPage from './pages/LoginPage';
-import AdminPage from './pages/AdminPage';
-import CategoryPage from './pages/CategoryPage';
+import HomePage from './pages/HomePage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import AdminPage from './pages/AdminPage.jsx';
+import CategoryPage from './pages/CategoryPage.jsx';
 
 import Navbar from './components/Navbar.jsx';
 
@@ -22,7 +22,7 @@ function App() {
 	useEffect(() => {
 		checkAuth();
 	}, [checkAuth]);
-console.log(user)
+	console.log(user);
 	useEffect(() => {
 		if (!user) return;
 
