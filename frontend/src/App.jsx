@@ -22,7 +22,7 @@ function App() {
 	useEffect(() => {
 		checkAuth();
 	}, [checkAuth]);
-
+console.log(user)
 	useEffect(() => {
 		if (!user) return;
 
