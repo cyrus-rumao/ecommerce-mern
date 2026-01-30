@@ -11,6 +11,7 @@ const generateTokens = (userId) => {
   const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
+  console.log("Tokens: ",accessToken,refreshToken)
   return { accessToken, refreshToken };
 };
 
@@ -29,7 +30,7 @@ const storeRefreshToken = async (refreshToken, userId) => {
 
 const setCookies = (res, accessToken, refreshToken) => {
   res.cookie("accessToken", accessToken, {
-    httpOnly: true, //prevent xss attacks
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: "lax",
     maxAge: 15 * 60 * 1000,

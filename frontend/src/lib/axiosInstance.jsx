@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://ecommerce-mern-2-xtqq.onrender.com/api';
+const baseURL = 'http://localhost:5000/api';
 
 const axiosInstance = axios.create({
 	baseURL,
@@ -53,7 +53,7 @@ axiosInstance.interceptors.response.use(
 				const res = await axios.post(
 					`${baseURL}/auth/refresh-token`,
 					{},
-					{ withCredentials: true }
+					{ withCredentials: true },
 				);
 
 				const newAccessToken = res.data.accessToken;
@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
 		}
 
 		return Promise.reject(error);
-	}
+	},
 );
 
 export default axiosInstance;

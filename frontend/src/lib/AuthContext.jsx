@@ -21,10 +21,7 @@ export const AuthProvider = ({ children }) => {
 	if (currentUser && currentUser.role === 'customer') {
 		async () => {
 			try {
-				const response = await axios.get(
-					'https://ecommerce-mern-2-xtqq.onrender.com/api/cart/',
-					{}
-				);
+				const response = await axios.get('http://localhost:5000/api/cart/', {});
 				setCount(response.data.length);
 			} catch (error) {
 				console.error('Failed to fetch cart items', error);
